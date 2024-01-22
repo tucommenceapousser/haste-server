@@ -1,70 +1,224 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
-	<head>
+<head>
+	<meta charset="utf-8" />
+	<title>hastebytrhacknon</title>
 
-		<title>hastebin</title>
-		<meta charset="utf-8" />
-		<link rel="stylesheet" type="text/css" href="solarized_dark.css"/>
-		<link rel="stylesheet" type="text/css" href="application.css"/>
+	<!-- SEO Meta Tags -->
+	<meta name="description" content="hastebin by trhacknon" />
+	<meta name="keywords" content="hastebin, trhacknon, code sharing" />
+	<meta name="author" content="Your Name" />
+
+	<!-- Open Graph Meta Tags (for social media sharing) -->
+	<meta property="og:title" content="hastebytrhacknon" />
+	<meta property="og:description" content="hastebin by trhacknon" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://hastetrkn.replit.app/" />
+	<meta property="og:image" content="https://static-trkn.replit.app/cup.png" />
+	<meta property="og:image:width" content="180" />
+	<meta property="og:image:height" content="180" />
+
+	<!-- Twitter Meta Tags (for Twitter card) -->
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:site" content="@trhacknon" />
+	<meta name="twitter:title" content="hastebytrhacknon" />
+	<meta name="twitter:description" content="hastebin by trhacknon" />
+	<meta name="twitter:image" content="https://static-trkn.replit.app/cup.png" />
+
+	<!-- Additional Meta Tags -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="robots" content="index, follow" />
+
+	<!-- Favicon (replace with your own) -->
+	<link rel="icon" href="favicon.ico" type="image/x-icon" />
+		<link rel="stylesheet" type="text/css" href="solarized_dark.css" />
+	<link rel="stylesheet" type="text/css" href="application.css" />
+		<link rel="stylesheet" type="text/css" href="hacker_theme.css" />
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+		<!-- Existing script tags remain unchanged -->
 
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 		<script type="text/javascript" src="highlight.min.js"></script>
 		<script type="text/javascript" src="application.min.js"></script>
 
-		<meta name="robots" content="noindex,nofollow"/>
+		<meta name="robots" content="noindex,nofollow" />
 
-		<script type="text/javascript">
+		<style>
+				body {
+						background: #3e3e3e;
+						margin: 0;
+						font-family: 'Comic Sans MS', cursive, sans-serif;
+				}
+
+				#welcome-message {
+						text-align: center;
+						padding: 50px;
+						margin: 50px auto;
+						background-color: #ffcc00;
+						border-radius: 20px;
+						box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+						color: #333;
+				}
+
+				#messages {
+						list-style: none;
+						padding: 0;
+						text-align: center;
+				}
+
+				#key {
+						display: flex;
+						flex-direction: column;
+						align-items: center;
+						justify-content: center;
+						text-align: center; /* Add this line for centering text */
+						background-color: #4CAF50;
+						color: white;
+						padding: 20px;
+						border-radius: 10px;
+						box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+						margin: 20px auto;
+						max-width: 600px; /* Add this line to limit the width */
+						position: center;
+						top: 240px;
+						right: 30%;
+						z-index: +1000; /* watch out */
+			}
+
+				#box1 h1 {
+						font-size: 36px;
+						color: #ff0000;
+						margin: 0;
+				}
+
+				#box2 .function {
+						background-color: #ff4081;
+						color: #fff;
+						padding: 10px 20px;
+						margin: 10px;
+						border-radius: 10px;
+						font-size: 16px;
+						cursor: pointer;
+						transition: transform 0.3s ease-in-out;
+				}
+
+				#box2 .function:hover {
+						transform: scale(1.1);
+				}
+
+				#linenos {
+						background-color: #2e2e2e;
+						color: #fff;
+						padding: 10px;
+						border-radius: 10px;
+						position: absolute;
+						top: 50%;
+						transform: translateY(-50%);
+						left: 10px;
+				}
+
+				#box {
+						align-items: center;
+						text-align: center;
+						background-color: #2e2e2e;
+						color: #fff;
+						padding: 20px;
+						border-radius: 10px;
+						font-size: 16px;
+						margin-top: 20px;
+						display: flex;
+						flex-direction: column;
+				}
+
+				textarea {
+						margin-top: 10px;
+						padding: 10px;
+						border: 1px solid #ddd;
+						border-radius: 5px;
+						resize: none;
+						font-family: 'Comic Sans MS', cursive, sans-serif;
+						display: flex;
+						top: 700px;
+				}
+
+				button.save {
+						margin-top: 10px;
+				}
+		</style>
+	<script type="text/javascript">
 			var app = null;
-			// Handle pops
-			var handlePop = function(evt) {
-				var path = evt.target.location.href;
-				if (path === app.baseUrl) { app.newDocument(true); }
-				else { app.loadDocument(path.split('/').slice(-1)[0]); }
-			};
-			// Set up the pop state to handle loads, skipping the first load
-			// to make chrome behave like others:
-			// http://code.google.com/p/chromium/issues/detail?id=63040
-			setTimeout(function() {
-				window.onpopstate = function(evt) {
-					try { handlePop(evt); } catch(err) { /* not loaded yet */ }
-				};
-			}, 1000);
-			// Construct app and load initial path
-			$(function() {
-				var baseUrl = window.location.href.split('/');
-				baseUrl = baseUrl.slice(0, baseUrl.length - 1).join('/') + '/';
-				app = new haste('hastebin', { twitter: true, baseUrl: baseUrl });
-				handlePop({ target: window });
+
+			$(document).ready(function () {
+					var baseUrl = window.location.href.split('/');
+					baseUrl = baseUrl.slice(0, baseUrl.length - 1).join('/') + '/';
+					app = new haste('hastebin', { twitter: true, baseUrl: baseUrl });
+
+					// Added function to load existing document
+					function loadExistingDocument() {
+							var path = window.location.pathname;
+							if (path) {
+									app.loadDocument(path.split('/').slice(-1)[0]);
+							}
+					}
+
+					// Click event for save button
+					$(document).on('click', '.save', function () {
+							app.saveDocument();
+					});
+
+					// Click event for new button
+					$(document).on('click', '.new', function () {
+							app.newDocument(true);
+					});
+
+					// Click event for duplicate button
+					$(document).on('click', '.duplicate', function () {
+							app.duplicateDocument();
+					});
+
+					// Click event for raw button
+					$(document).on('click', '.raw', function () {
+							app.switchRaw();
+					});
+
+					// Click event for twitter button
+					$(document).on('click', '.twitter', function () {
+							app.publishToTwitter();
+					});
+
+					// Ensure the document is fully loaded before focusing on the textarea
+					document.querySelector('textarea').focus();
+
+					// Load existing document when the page is ready
+					loadExistingDocument();
 			});
-		</script>
-
-	</head>
-
-	<body>
-		<ul id="messages"></ul>
-
-		<div id="key">
-		  <div id="pointer" style="display:none;"></div>
-			<div id="box1">
-				<a href="about.md" class="logo"></a>
-			</div>
-			<div id="box2">
-				<button class="save function button-picture">Save</button>
-				<button class="new function button-picture">New</button>
-				<button class="duplicate function button-picture">Duplicate & Edit</button>
-				<button class="raw function button-picture">Just Text</button>
-				<button class="twitter function button-picture">Twitter</button>
-			</div>
-			<div id="box3" style="display:none;">
-				<div class="label"></div>
-				<div class="shortcut"></div>
-			</div>
+	</script>
+</head>
+<body>
+		<div id="welcome-message" class="animated bounceInDown">
+				<font color="red"><h1>Welcome to the TRHACKNON hastebin!</h1></font>
 		</div>
 
+	<br><br><br><br><br><br><center>	<div id="key" class="animated bounceInRight">
+				<div id="box1">
+						<a href="/about.md" class="logo"><font color="red"><h1>trhacknon</h1></font></a>
+				</div>
+				<div id="box2">
+						<button class="save function button-picture animated pulse">Save</button>
+						<button class="new function button-picture animated pulse">New</button>
+						<button class="duplicate function button-picture animated pulse">Duplicate & Edit</button>
+						<button class="raw function button-picture animated pulse">Just Text</button>
+						<button class="twitter function button-picture animated pulse">Twitter</button>
+				</div>
+				<div id="box3" style="display:none;">
+						<div class="label"></div>
+						<div class="shortcut"></div>
+				</div>
+		</div></center>
+
 		<div id="linenos"></div>
-		<pre id="box" style="display:none;" class="hljs" tabindex="0"><code></code></pre>
+	<br><br><br><br><pre id="box"  style="text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center;" class="hljs animated zoomIn" tabindex="0"><code></code></pre>
 		<textarea spellcheck="false" style="display:none;"></textarea>
-
-	</body>
-
-</html>
+</body></html>
